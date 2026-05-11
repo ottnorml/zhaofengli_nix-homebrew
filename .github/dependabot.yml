@@ -1,0 +1,68 @@
+version: 2
+
+updates:
+  # User-facing flake.
+  # Intentionally restricted to Homebrew CLI updates.
+  - package-ecosystem: "nix"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      # interval: "weekly"
+      # day: "monday"
+      time: "06:10"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 2
+    labels:
+      - "dependencies"
+      - "nix"
+      - "homebrew"
+    commit-message:
+      prefix: "nix"
+      include: "scope"
+    allow:
+      - dependency-name: "brew-src"
+
+  # CI/dev-only flake.
+  # Keep CI dependency churn in one PR.
+  - package-ecosystem: "nix"
+    directory: "/ci"
+    schedule:
+      interval: "daily"
+      # interval: "weekly"
+      # day: "monday"
+      time: "06:20"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 1
+    labels:
+      - "dependencies"
+      - "nix"
+      - "ci"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      ci-flake-inputs:
+        patterns:
+          - "*"
+
+  # GitHub Actions used by .github/workflows/*.yml.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      # interval: "weekly"
+      # day: "monday"
+      time: "06:30"
+      timezone: "Europe/Berlin"
+    open-pull-requests-limit: 1
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "ci"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
