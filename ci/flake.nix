@@ -2,10 +2,10 @@
 {
   inputs = {
     nixpkgs_unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs_25_11.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs_25_11.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     nix-darwin_unstable.url = "github:nix-darwin/nix-darwin";
-    nix-darwin_25_11.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+    nix-darwin_25_11.url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
 
     nix-github-actions = {
       url = "github:nix-community/nix-github-actions";
