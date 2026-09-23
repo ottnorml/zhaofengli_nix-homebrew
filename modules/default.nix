@@ -338,13 +338,18 @@ let
       echo -e "$:.unshift \"${ruby.gems.fiddle}/${ruby.gemPath}/gems/fiddle-${ruby.gems.fiddle.version}/lib\"" >>"$bundler_setup_rb"
     fi
   '' + lib.optionalString (brew ? version) ''
-    # Embed version number instead of checking with git
+    # Embed version number instead of checking with git. nix-homebrew uses a
+    # synthetic repository without Homebrew's git history, so git-based
+    # version detection cannot determine the installed Homebrew version.
     brew_sh="$out/Library/Homebrew/brew.sh"
     chmod u+w "$out/Library/Homebrew" "$brew_sh"
-    sed -i -e 's/^HOMEBREW_VERSION=.*/HOMEBREW_VERSION="${brew.version}"/g' "$brew_sh"
-
-    # 4.3.5: Clear GIT_REVISION to bypass caching mechanism
-    sed -i -e 's/^GIT_REVISION=.*/GIT_REVISION=""; HOMEBREW_VERSION="${brew.version}"/g' "$brew_sh"
+    replacement=$(printf '%s\n%s' \
+      'HOMEBREW_VERSION="${brew.version}"' \
+      'HOMEBREW_USER_AGENT_VERSION="''${HOMEBREW_VERSION}"')
+    substituteInPlace "$brew_sh" \
+      --replace-fail \
+        'HOMEBREW_USER_AGENT_VERSION="''${HOMEBREW_VERSION}"' \
+        "$replacement"
   '');
 in {
   options = {

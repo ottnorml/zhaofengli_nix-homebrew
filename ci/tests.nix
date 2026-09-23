@@ -171,6 +171,9 @@ in
       ci.postScript = ''
         >&2 echo "Checking brew"
         which brew
+
+        >&2 echo "Checking brew version"
+        brew --version | grep -Fx "Homebrew ${config.nix-homebrew.package.version}"
       ''
       + lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
         >&2 echo "Checking that we can still use the unbound package"
